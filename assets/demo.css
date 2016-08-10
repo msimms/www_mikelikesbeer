@@ -63,7 +63,7 @@ body{
 .gap {
 	background:transparent center no-repeat;
 	background-size:cover;
-	height:55vh;
+	height:58vh;
 }
 
 .skrollr .gap {
@@ -78,7 +78,7 @@ body{
 #page-intro h1{
 	text-align: center;
 	color: #fff;
-	font: normal 60px 'Droid Serif', sans-serif;
+	font: normal 96px 'Droid Serif', sans-serif;
 	padding-top: 24vh;
 }
 
@@ -170,7 +170,7 @@ footer .footer-links{
 footer .footer-links a{
 	display: inline-block;
 	text-decoration: none;
-	color: #50B575;
+	color: #242424;
 }
 
 footer .footer-company-name{
