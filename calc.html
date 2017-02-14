@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<script>
+var counter = 1;
+function addInput(divName)
+{
+	var newDiv = document.createElement('div');
+	newDiv.innerHTML = "Hop Addition " + (counter + 1) + ": <input type='text' name='myInputs[]'><br>";
+	document.getElementById(divName).appendChild(newDiv);
+	counter++;
+}
+</script>
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<title>Mike Likes Beer - Beer Calculator</title>
+
+	<link href="assets/demo.css" rel="stylesheet">
+	<link href="assets/header.css" rel="stylesheet">
+</head>
+
+<body>
+
+<div>
+
+<form method="POST">
+	Original Gravity: <input type="text" name="OG"><br>
+	Final Gravity: <input type="text" name="FG"><br>
+	<div id="dynamicInput">
+		Hop Addition 1: <input type="text" name="myInputs[]"><br>
+	</div>
+	<input type="button" value="Add more hops" onClick="addInput('dynamicInput');">
+</form>
+
+</div>
+
+</body>
+</html>
