@@ -18,24 +18,73 @@ function addInput(divName)
 
 	<title>Mike Likes Beer - Beer Calculator</title>
 
-	<link href="assets/demo.css" rel="stylesheet">
-	<link href="assets/header.css" rel="stylesheet">
+	<link href='https://fonts.googleapis.com/css?family=Droid+Serif' rel='stylesheet' type='text/css'>
+	<link href="assets/style.css" rel="stylesheet">
 </head>
 
 <body>
 
-<div>
+<div
+	class="parallax-image-wrapper"
+	data-anchor-target="#page-intro"
+	data-bottom-top="transform:translateY(200%)"
+	data-top-bottom="transform:translateY(0)">
 
-<form method="POST">
-	Original Gravity: <input type="text" name="OG"><br>
-	Final Gravity: <input type="text" name="FG"><br>
-	<div id="dynamicInput">
-		Hop Addition 1: <input type="text" name="myInputs[]"><br>
+	<div
+		class="parallax-image"
+		style="background-image:url(assets/images/beer.jpg)"
+		data-anchor-target="#page-intro"
+		data-bottom-top="transform: translateY(-80%);"
+		data-top-bottom="transform: translateY(80%);" >
 	</div>
-	<input type="button" value="Add more hops" onClick="addInput('dynamicInput');">
-</form>
+</div>
+
+<div id="skrollr-body">
+
+	<div id="page-intro" class="gap" style="background-image:url(assets/images/beer.jpg); ">
+		<h1>Beer Calculator</h1>
+	</div>
+
+	<div class="body-text content">
+
+	<form method="POST">
+		Original Gravity: <input type="text" name="OG"><br>
+		Final Gravity: <input type="text" name="FG"><br>
+		<div id="dynamicInput">
+			Hop Addition 1: <input type="text" name="myInputs[]"><br>
+		</div>
+		<input type="button" value="Add more hops" onClick="addInput('dynamicInput');">
+	</form>
+
+	</div>
+
+	<footer>
+
+		<div class="footer-left">
+
+		<p class="footer-links">
+		<a href="https://www.youtube.com/channel/UCy7NAv_0XcP_DB0gu-bpr2A">YouTube</a>
+		·
+		<a href="https://twitter.com/mike_likes_beer">Twitter</a>
+		·
+		<a href="https://untappd.com/SimmsHomebrew">Untappd (Homebrew)</a>
+		</p>
+
+		<p class="footer-company-name">Michael Simms &copy; 2016</p>
+
+		</div>
+
+	</footer>
 
 </div>
+
+<script src="assets/skrollr.min.js"></script>
+
+<script>
+	skrollr.init();
+</script>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
 </body>
 </html>
