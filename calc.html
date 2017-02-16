@@ -2,13 +2,20 @@
 <html lang="en">
 
 <script>
-var counter = 1;
+var counter = 0;
 function addInput(divName)
 {
 	var newDiv = document.createElement('div');
-	newDiv.innerHTML = "Hop Addition " + (counter + 1) + ": <input type='text' name='myInputs[]'><br>";
+	newDiv.innerHTML = "Hop Addition " + (counter + 1) + ": <input type='text' name='hopAdditionAA[]' value='0'>% Alpha Acid, <input type='text' name='hopAdditionBoilTime[]' value='60'>Boil Time (mins)";
 	document.getElementById(divName).appendChild(newDiv);
 	counter++;
+}
+function calc(divName)
+{
+	var og = document.getElementsByName("OG")[0].value;
+	var fg = document.getElementsByName("FG")[0].value;
+	var abv = 132.715 * Math.abs(og - fg);
+	document.getElementById("result").innerHTML = abv;
 }
 </script>
 
@@ -27,14 +34,14 @@ function addInput(divName)
 <div
 	class="parallax-image-wrapper"
 	data-anchor-target="#page-intro"
-	data-bottom-top="transform:translateY(200%)"
-	data-top-bottom="transform:translateY(0)">
+	data-bottom-top="transform: translateY(150%)"
+	data-top-bottom="transform: translateY(0)">
 
 	<div
 		class="parallax-image"
-		style="background-image:url(assets/images/beer.jpg)"
+		style="background-image: url(assets/images/beer.jpg)"
 		data-anchor-target="#page-intro"
-		data-bottom-top="transform: translateY(-80%);"
+		data-bottom-top="transform: translateY(-50%);"
 		data-top-bottom="transform: translateY(80%);" >
 	</div>
 </div>
@@ -48,13 +55,16 @@ function addInput(divName)
 	<div class="body-text content">
 
 	<form method="POST">
-		Original Gravity: <input type="text" name="OG"><br>
-		Final Gravity: <input type="text" name="FG"><br>
-		<div id="dynamicInput">
-			Hop Addition 1: <input type="text" name="myInputs[]"><br>
+		Volume: <input type="text" name="Gallons" value="5.0"> Gallons<br>
+		Original Gravity: <input type="text" name="OG" value="1.0"><br>
+		Final Gravity: <input type="text" name="FG" value="1.0"><br>
+		<div id="hopAdditions">
 		</div>
-		<input type="button" value="Add more hops" onClick="addInput('dynamicInput');">
+		<input type="button" value="Add more hops" onClick="addInput('hopAdditions');">
+		<input type="button" value="Calculate" onClick="calc('hopAdditions');">
 	</form>
+
+	<p id="result"></p>
 
 	</div>
 
@@ -67,10 +77,10 @@ function addInput(divName)
 		·
 		<a href="https://twitter.com/mike_likes_beer">Twitter</a>
 		·
-		<a href="https://untappd.com/SimmsHomebrew">Untappd (Homebrew)</a>
+		<a href="https://untappd.com/SimmsHomebrew">Untappd (My Homebrew)</a>
 		</p>
 
-		<p class="footer-company-name">Michael Simms &copy; 2016</p>
+		<p class="footer-company-name">Michael Simms &copy; 2017</p>
 
 		</div>
 
@@ -82,6 +92,7 @@ function addInput(divName)
 
 <script>
 	skrollr.init();
+	addInput('hopAdditions')
 </script>
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
