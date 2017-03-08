@@ -6,7 +6,7 @@ var counter = 0;
 function addInput(divName)
 {
 	var newDiv = document.createElement('div');
-	newDiv.innerHTML = "Hop Addition " + (counter + 1) + ": <input type='text' name='hopAdditionAA[]' value='0'>% Alpha Acid, <input type='text' name='hopAdditionBoilTime[]' value='60'>Boil Time (mins)";
+	newDiv.innerHTML = "Hop Addition " + (counter + 1) + " - Alpha Acid: <input type='text' name='hopAdditionAA[]' value='0'>%, Boil Time: <input type='text' name='hopAdditionBoilTime[]' value='60'> minutes";
 	document.getElementById(divName).appendChild(newDiv);
 	counter++;
 }
@@ -55,12 +55,12 @@ function calc(divName)
 	<div class="body-text content">
 
 	<form method="POST">
-		Volume: <input type="text" name="Gallons" value="5.0"> Gallons<br>
+		Volume: <input type="text" name="Gallons" value="5.0"> gallons<br>
 		Original Gravity: <input type="text" name="OG" value="1.0"><br>
 		Final Gravity: <input type="text" name="FG" value="1.0"><br>
 		<div id="hopAdditions">
 		</div>
-		<input type="button" value="Add more hops" onClick="addInput('hopAdditions');">
+		<input type="button" value="Add more hops" onClick="addInput('hopAdditions');"> <br>
 		<input type="button" value="Calculate" onClick="calc('hopAdditions');">
 	</form>
 
