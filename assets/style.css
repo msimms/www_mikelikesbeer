@@ -69,8 +69,8 @@ body {
 #page-intro h1 {
 	text-align: center;
 	color: #fff;
-	font: normal 128px 'Droid Serif', sans-serif;
-	padding-top: 10vh;
+	font: normal 128px 'Futura', condensed, sans-serif;
+	padding-top: 5vh;
 }
 
 .body-text {
