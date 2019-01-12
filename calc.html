@@ -2,20 +2,99 @@
 <html lang="en">
 
 <script>
+// Boil time ins in increments of 5 minutes.
+var util_1_030 = [0.0, 0.055, 0.100, 0.137, 0.167, 0.192, 0.212, 0.229, 0.242, 0.253, 0.263, 0.270, 0.276, 0.285, 0.291, 0.295, 0.298, 0.300, 0.301];
+var util_1_040 = [0.0, 0.050, 0.091, 0.125, 0.153, 0.175, 0.194, 0.209, 0.221, 0.232, 0.240, 0.247, 0.252, 0.261, 0.266, 0.270, 0.272, 0.274, 0.275];
+var util_1_050 = [0.0, 0.046, 0.084, 0.114, 0.140, 0.160, 0.177, 0.191, 0.202, 0.212, 0.219, 0.226, 0.231, 0.238, 0.243, 0.247, 0.249, 0.251, 0.252];
+var util_1_060 = [0.0, 0.042, 0.076, 0.105, 0.128, 0.147, 0.162, 0.175, 0.185, 0.194, 0.200, 0.206, 0.211, 0.218, 0.222, 0.226, 0.228, 0.229, 0.230];
+var util_1_070 = [0.0, 0.038, 0.070, 0.096, 0.117, 0.134, 0.148, 0.160, 0.169, 0.177, 0.183, 0.188, 0.193, 0.199, 0.203, 0.206, 0.208, 0.209, 0.210];
+var util_1_080 = [0.0, 0.035, 0.064, 0.087, 0.107, 0.122, 0.135, 0.146, 0.155, 0.162, 0.168, 0.172, 0.176, 0.182, 0.186, 0.188, 0.190, 0.191, 0.192];
+var util_1_090 = [0.0, 0.032, 0.058, 0.080, 0.098, 0.112, 0.124, 0.133, 0.141, 0.148, 0.153, 0.157, 0.161, 0.166, 0.170, 0.172, 0.174, 0.175, 0.176];
+var util_1_100 = [0.0, 0.029, 0.053, 0.073, 0.089, 0.102, 0.113, 0.122, 0.129, 0.135, 0.140, 0.144, 0.147, 0.152, 0.155, 0.157, 0.159, 0.160, 0.161];
+var util_1_110 = [0.0, 0.027, 0.049, 0.067, 0.081, 0.094, 0.103, 0.111, 0.118, 0.123, 0.128, 0.132, 0.135, 0.139, 0.142, 0.144, 0.145, 0.146, 0.147];
+var util_1_120 = [0.0, 0.025, 0.045, 0.061, 0.074, 0.085, 0.094, 0.102, 0.108, 0.113, 0.117, 0.120, 0.123, 0.127, 0.130, 0.132, 0.133, 0.134, 0.134];
+var utils = [util_1_030, util_1_040, util_1_050, util_1_060, util_1_070, util_1_080, util_1_090, util_1_100, util_1_110, util_1_120];
+
 var counter = 0;
-function addInput(divName)
+
+function addAnotherHopInput()
 {
 	var newDiv = document.createElement('div');
-	newDiv.innerHTML = "Hop Addition " + (counter + 1) + " - Alpha Acid: <input type='text' name='hopAdditionAA[]' value='0'>%, Boil Time: <input type='text' name='hopAdditionBoilTime[]' value='60'> minutes";
-	document.getElementById(divName).appendChild(newDiv);
+	newDiv.innerHTML = "<b>Hop Addition " + (counter + 1) + "</b> - Alpha Acid: <input type='text' name='hopAdditionAA" + counter + "' value='12.0'>%, Weight: <input type='text' name='hopAdditionWeight" + counter + "' value='1.0'> oz., Boil Time: <input type='text' name='hopAdditionBoilTime" + counter + "' value='60'> minutes";
+	document.getElementById('hopAdditions').appendChild(newDiv);
 	counter++;
 }
-function calc(divName)
+
+function interpolate(y0, y1, x0, x1, x)
 {
+	var denominator = x1 - x0;
+	if (denominator == 0)
+		return y0;
+	var y = (y0 * (x1 - x) + y1 * (x - x0) ) / denominator;
+	return y;
+}
+
+function hopUtilization(weight, boil_time)
+{
+	var util_index = (weight - 1.030) / 0.010;
+	if (util_index < 0)
+		util_index = 0;
+	if (util_index > utils.length - 1)
+		util_index = utils.length - 1;
+
+	var util_index0 = Math.floor(util_index);
+	var util_index1 = Math.ceil(util_index);
+
+	var boil_index = boil_time / 5.0;
+	if (boil_index < 0)
+		boil_index = 0;
+	if (boil_index > util_1_030.length - 1)
+		boil_index = util_1_030.length - 1;
+
+	var boil_index0 = Math.floor(boil_index);
+	var boil_index1 = Math.ceil(boil_index);
+
+	var util00 = utils[util_index0][boil_index0];
+	var util01 = utils[util_index0][boil_index1];
+
+	var util10 = utils[util_index1][boil_index0];
+	var util11 = utils[util_index1][boil_index1];
+
+	var temp1 = interpolate(util01, util00, Math.floor(boil_time), Math.ceil(boil_time), boil_time);
+	var temp2 = interpolate(util10, util11, Math.floor(boil_time), Math.ceil(boil_time), boil_time);
+	var utilization = interpolate(temp1, temp2, Math.floor(weight * 100.0) / 100.0, Math.ceil(weight * 100.0) / 100.0, weight);
+
+	return utilization;
+}
+
+function calc()
+{
+	var volume = document.getElementsByName("volume")[0].value;
+	var volume_conversion = 74.89; // 74.89 for gallons, 10 for litres
 	var og = document.getElementsByName("OG")[0].value;
 	var fg = document.getElementsByName("FG")[0].value;
-	var abv = 132.715 * Math.abs(og - fg);
-	document.getElementById("result").innerHTML = abv;
+	var abv = (76.08 * (og - fg) / (1.775 - og)) * (fg / 0.794);
+	var total_ibu = 0.0;
+
+	var i;
+	for (i = 0; i < counter; ++i)
+	{
+		var alpha_acid = document.getElementsByName("hopAdditionAA" + i)[0].value;
+		var weight = document.getElementsByName("hopAdditionWeight" + i)[0].value;
+		var boil_time = document.getElementsByName("hopAdditionBoilTime" + i)[0].value;
+		var aau = alpha_acid * weight;
+		var ibu = aau * hopUtilization(og, boil_time) * volume_conversion / volume;
+		total_ibu = total_ibu + ibu;
+	}
+
+	out_str = "<b>"
+	out_str = out_str + abv.toString();
+	out_str = out_str + "% ABV <br>"
+	out_str = out_str + total_ibu.toString();
+	out_str = out_str + " IBUs <br>"
+	out_str = out_str + "<b>"
+
+	document.getElementById("result").innerHTML = out_str;
 }
 </script>
 
@@ -23,7 +102,7 @@ function calc(divName)
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
-	<title>Mike Likes Beer - Beer Calculator</title>
+	<title>Mike Likes Beer | ABV and IBU Calculator</title>
 
 	<link href='https://fonts.googleapis.com/css?family=Droid+Serif' rel='stylesheet' type='text/css'>
 	<link href="assets/style.css" rel="stylesheet">
@@ -49,22 +128,24 @@ function calc(divName)
 <div id="skrollr-body">
 
 	<div id="page-intro" class="gap" style="background-image:url(assets/images/beer.jpg); ">
-		<h1>Beer Calculator</h1>
+		<h1>ABV and IBU Calculator</h1>
 	</div>
 
 	<div class="body-text content">
 
 	<form method="POST">
-		Volume: <input type="text" name="Gallons" value="5.0"> gallons<br>
-		Original Gravity: <input type="text" name="OG" value="1.0"><br>
-		Final Gravity: <input type="text" name="FG" value="1.0"><br>
+		<b>Volume</b>: <input type="text" name="volume" value="5.0"> gallons<br>
+		<b>Original Gravity</b>: <input type="text" name="OG" value="1.06"><br>
+		<b>Final Gravity</b>: <input type="text" name="FG" value="1.02"><br>
 		<div id="hopAdditions">
 		</div>
-		<input type="button" value="Add more hops" onClick="addInput('hopAdditions');"> <br>
-		<input type="button" value="Calculate" onClick="calc('hopAdditions');">
+		<input type="button" value="Add more hops" onClick="addAnotherHopInput();"> <br>
+		<input type="button" value="Calculate" onClick="calc();">
 	</form>
 
-	<p id="result"></p>
+	<div id="result" class="result">
+
+	</p>
 
 	</div>
 
@@ -75,14 +156,18 @@ function calc(divName)
 		<p class="footer-links">
 			<a href="https://www.youtube.com/channel/UCy7NAv_0XcP_DB0gu-bpr2A">YouTube</a>
 			·
+			<a href="https://instagram.com/mikelikesbeer_">Instagram</a>
+			·
 			<a href="https://twitter.com/mike_likes_beer">Twitter</a>
 			·
-			<a href="https://untappd.com/SimmsHomebrew">Untappd (My Homebrew)</a>
-			.
+			<a href="https://untappd.com/SimmsHomebrew">Untappd</a>
+			·
+			<a href="calc.html">Beer Calculator</a>
+			·
 			<a href="tip_jar.html">Tip Jar</a>
 		</p>
 
-		<p class="footer-company-name">Michael Simms &copy; 2018</p>
+		<p class="footer-company-name">Michael Simms &copy; 2019</p>
 
 		</div>
 
@@ -94,7 +179,7 @@ function calc(divName)
 
 <script>
 	skrollr.init();
-	addInput('hopAdditions')
+	addAnotherHopInput()
 </script>
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
