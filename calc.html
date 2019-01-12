@@ -70,11 +70,17 @@ function hopUtilization(weight, boil_time)
 function calc()
 {
 	var volume = document.getElementsByName("volume")[0].value;
-	var volume_conversion = 74.89; // 74.89 for gallons, 10 for litres
+	var volume_units = document.getElementsByName("volume_units")[0].value;
 	var og = document.getElementsByName("OG")[0].value;
 	var fg = document.getElementsByName("FG")[0].value;
 	var abv = (76.08 * (og - fg) / (1.775 - og)) * (fg / 0.794);
 	var total_ibu = 0.0;
+	var volume_conversion = 74.89; // 74.89 for gallons, 10 for litres
+
+	if (volume_units == "litres")
+	{
+		volume_conversion = 10.0;
+	}
 
 	var i;
 	for (i = 0; i < counter; ++i)
@@ -134,7 +140,7 @@ function calc()
 	<div class="body-text content">
 
 	<form method="POST">
-		<b>Volume</b>: <input type="text" name="volume" value="5.0"> gallons<br>
+		<b>Volume</b>: <input type="text" name="volume" value="5.0"> <select name="volume_units"><option value="gallons">gallon(s)</option><option value="litres">litre(s)</option></select> <br>
 		<b>Original Gravity</b>: <input type="text" name="OG" value="1.06"><br>
 		<b>Final Gravity</b>: <input type="text" name="FG" value="1.02"><br>
 		<div id="hopAdditions">
