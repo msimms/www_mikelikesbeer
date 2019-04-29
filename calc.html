@@ -67,13 +67,21 @@ function hopUtilization(weight, boil_time)
 	return utilization;
 }
 
+function brixToSG(brix)
+{
+    var sg = (brix / (258.6 - ((brix / 258.2) * 227.1))) + 1.0;
+    return sg;
+}
+
 function calc()
 {
 	var volume = document.getElementsByName("volume")[0].value;
 	var volume_units = document.getElementsByName("volume_units")[0].value;
 	var og = document.getElementsByName("OG")[0].value;
+	var og_units = document.getElementsByName("og_units")[0].value;
 	var fg = document.getElementsByName("FG")[0].value;
-	var abv = (76.08 * (og - fg) / (1.775 - og)) * (fg / 0.794);
+	var fg_units = document.getElementsByName("fg_units")[0].value;
+	var abv = 0.0;
 	var total_ibu = 0.0;
 	var volume_conversion = 74.89; // 74.89 for gallons, 10 for litres
 
@@ -81,6 +89,24 @@ function calc()
 	{
 		volume_conversion = 10.0;
 	}
+
+    // Convert gravity units, if necessary.
+    if (og_units == "brix")
+    {
+        og = brixToSG(og);
+    }
+    if (fg_units == "brix")
+    {
+        fg = brixToSG(fg);
+    }
+    if (fg <= og)
+    {
+    	abv = (76.08 * (og - fg) / (1.775 - og)) * (fg / 0.794);
+    }
+    else
+    {
+        alert("Final gravity is less than the original gravity, indicating no fermentation.");
+    }
 
 	var i;
 	for (i = 0; i < counter; ++i)
@@ -94,9 +120,9 @@ function calc()
 	}
 
 	out_str = "<b>"
-	out_str = out_str + abv.toString();
+	out_str = out_str + abv.toFixed(2);
 	out_str = out_str + "% ABV <br>"
-	out_str = out_str + total_ibu.toString();
+	out_str = out_str + total_ibu.toFixed(2);
 	out_str = out_str + " IBUs <br>"
 	out_str = out_str + "<b>"
 
@@ -141,8 +167,8 @@ function calc()
 
 	<form method="POST">
 		<b>Volume</b>: <input type="text" name="volume" value="5.0"> <select name="volume_units"><option value="gallons">gallon(s)</option><option value="litres">litre(s)</option></select> <br>
-		<b>Original Gravity</b>: <input type="text" name="OG" value="1.06"><br>
-		<b>Final Gravity</b>: <input type="text" name="FG" value="1.02"><br>
+		<b>Original Gravity</b>: <input type="text" name="OG" value="1.06"> <select name="og_units"><option value="gravity">gravity</option><option value="brix">brix</option></select><br>
+		<b>Final Gravity</b>: <input type="text" name="FG" value="1.02"> <select name="fg_units"><option value="gravity">gravity</option><option value="brix">brix</option></select><br>
 		<div id="hopAdditions">
 		</div>
 		<input type="button" value="Add more hops" onClick="addAnotherHopInput();"> <br>
