@@ -69,17 +69,17 @@ function hopUtilization(weight, boil_time)
 
 function brixToSG(brix)
 {
-    var sg = (brix / (258.6 - ((brix / 258.2) * 227.1))) + 1.0;
-    return sg;
+	var sg = (brix / (258.6 - ((brix / 258.2) * 227.1))) + 1.0;
+	return sg;
 }
 
 function calc()
 {
 	var volume = document.getElementsByName("volume")[0].value;
 	var volume_units = document.getElementsByName("volume_units")[0].value;
-	var og = document.getElementsByName("OG")[0].value;
+	var og = parseFloat(document.getElementsByName("OG")[0].value);
 	var og_units = document.getElementsByName("og_units")[0].value;
-	var fg = document.getElementsByName("FG")[0].value;
+	var fg = parseFloat(document.getElementsByName("FG")[0].value);
 	var fg_units = document.getElementsByName("fg_units")[0].value;
 	var abv = 0.0;
 	var total_ibu = 0.0;
@@ -90,23 +90,23 @@ function calc()
 		volume_conversion = 10.0;
 	}
 
-    // Convert gravity units, if necessary.
-    if (og_units == "brix")
-    {
-        og = brixToSG(og);
-    }
-    if (fg_units == "brix")
-    {
-        fg = brixToSG(fg);
-    }
-    if (fg <= og)
-    {
-    	abv = (76.08 * (og - fg) / (1.775 - og)) * (fg / 0.794);
-    }
-    else
-    {
-        alert("Final gravity is less than the original gravity, indicating no fermentation.");
-    }
+	// Convert gravity units, if necessary.
+	if (og_units == "brix")
+	{
+		og = brixToSG(og);
+	}
+	if (fg_units == "brix")
+	{
+		fg = brixToSG(fg);
+	}
+	if (fg <= og)
+	{
+		abv = (76.08 * (og - fg) / (1.775 - og)) * (fg / 0.794);
+	}
+	else
+	{
+		alert("Final gravity is less than the original gravity, indicating no fermentation.");
+	}
 
 	var i;
 	for (i = 0; i < counter; ++i)
@@ -119,12 +119,20 @@ function calc()
 		total_ibu = total_ibu + ibu;
 	}
 
-	out_str = "<b>"
+	out_str = "<table>\n";
+	out_str = out_str + "<td><b>OG</b></td><td><b>"
+	out_str = out_str + og.toFixed(2);
+	out_str = out_str + "</b></td><tr>\n"
+	out_str = out_str + "<td><b>FG</b></td><td><b>"
+	out_str = out_str + fg.toFixed(2);
+	out_str = out_str + "</b></td><tr>\n"
+	out_str = out_str + "<td><b>Alcohol</b></td><td><b>"
 	out_str = out_str + abv.toFixed(2);
-	out_str = out_str + "% ABV <br>"
+	out_str = out_str + "% ABV</b></td><tr>\n"
+	out_str = out_str + "<td><b>Bitterness</b></td><td><b>"
 	out_str = out_str + total_ibu.toFixed(2);
-	out_str = out_str + " IBUs <br>"
-	out_str = out_str + "<b>"
+	out_str = out_str + " IBUs</b></td><tr>\n"
+	out_str = out_str + "</table>"
 
 	document.getElementById("result").innerHTML = out_str;
 }
@@ -177,7 +185,7 @@ function calc()
 
 	<div id="result" class="result">
 
-	</p>
+	</div>
 
 	</div>
 
