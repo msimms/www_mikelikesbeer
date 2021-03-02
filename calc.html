@@ -21,7 +21,7 @@ var counter = 0;
 function add_another_hop_input()
 {
     let newDiv = document.createElement('div');
-    newDiv.innerHTML = "<b>Hop Addition " + (counter + 1) + "</b> - Alpha Acid: <input type='text' name='hopAdditionAA" + counter + "' value='12.0'>%, Weight: <input type='text' name='hopAdditionWeight" + counter + "' value='1.0'> oz., Boil Time: <input type='text' name='hopAdditionBoilTime" + counter + "' value='60'> minutes";
+    newDiv.innerHTML = "<b>Hop Addition " + (counter + 1) + "</b> - Alpha Acid: <input type='text' id='hopAdditionAA" + counter + "' value='12.0'>%, Weight: <input type='text' id='hopAdditionWeight" + counter + "' value='1.0'> oz., Boil Time: <input type='text' id='hopAdditionBoilTime" + counter + "' value='60'> minutes";
     document.getElementById('hopAdditions').appendChild(newDiv);
     counter++;
 }
@@ -74,19 +74,68 @@ function hop_utilization(weight, boil_time)
 /// @function brix_to_sg
 function brix_to_sg(brix)
 {
-    let sg = (brix / (258.6 - ((brix / 258.2) * 227.1))) + 1.0;
-    return sg;
+    return (brix / (258.6 - ((brix / 258.2) * 227.1))) + 1.0;
+}
+
+/// @function sg_to_brix
+function sg_to_brix(sg)
+{
+    return (((182.4601 * sg - 775.6821) * sg + 1262.7794) * sg - 669.5622);
+}
+
+/// @function celcius_to_fahrenheit
+function celcius_to_fahrenheit(temp)
+{
+    return ((9.0 / 5.0) * temp) + 32.0;
+}
+
+/// @function fahrenheit_to_celcius
+function fahrenheit_to_celcius(temp)
+{
+    return ((5.0 / 9.0) * temp) - 32.0;
+}
+
+/// @function calculate_final_brix_to_sg
+function calculate_adjusted_final_brix_to_sg(original_brix, final_brix, temp_f)
+{
+    let adjusted_sg = (1.001843 - 0.002318474 * original_brix - 0.000007775 * (original_brix * original_brix) - 0.000000034 * (original_brix * original_brix * original_brix) +
+        0.00574 * final_brix + 0.00003344 * (final_brix * final_brix) + 0.000000086 * (final_brix * final_brix * final_brix)) +
+        (1.313454 - 0.132674 * temp_f + 0.002057793 * (temp_f * temp_f) - 0.000002627634 * (temp_f * temp_f * temp_f)) * 0.001;
+
+    if (adjusted_sg < 1.0)
+        adjusted_sg = 1.0;
+    return adjusted_sg;
+}
+
+/// @function on_final_reading_units_changed
+function on_final_reading_units_changed()
+{
+    let final_reading_units = document.getElementById("final_reading_units").value;
+    let final_reading_temp_para = document.getElementById("final_reading_temp_para");
+
+    if (final_reading_units == "brix")
+    {
+        final_reading_temp_para.style = 'display: inline-block';
+    }
+    else
+    {
+        final_reading_temp_para.style = 'display: none';
+    }
 }
 
 /// @function calc
 function calc()
 {
-    let volume = document.getElementsByName("volume")[0].value;
-    let volume_units = document.getElementsByName("volume_units")[0].value;
-    let og = parseFloat(document.getElementsByName("OG")[0].value);
-    let og_units = document.getElementsByName("og_units")[0].value;
-    let fg = parseFloat(document.getElementsByName("FG")[0].value);
-    let fg_units = document.getElementsByName("fg_units")[0].value;
+    let volume = document.getElementById("volume").value;
+    let volume_units = document.getElementById("volume_units").value;
+    let original_reading = parseFloat(document.getElementById("original_reading").value);
+    let original_reading_units = document.getElementById("original_reading_units").value;
+    let final_reading = parseFloat(document.getElementById("final_reading").value);
+    let final_reading_units = document.getElementById("final_reading_units").value;
+    let final_reading_temp = parseFloat(document.getElementById("final_reading_temp").value);
+    let final_reading_temp_units = document.getElementById("final_reading_temp_units").value;
+    let final_reading_temp_check = document.getElementById("final_reading_temp_check").checked;
+    let original_brix = 0.0;
     let abv = 0.0;
     let total_ibu = 0.0;
     let volume_conversion = 74.89; // 74.89 for gallons, 10 for litres
@@ -96,41 +145,60 @@ function calc()
         volume_conversion = 10.0;
     }
 
+    // Convert temperature units, if necessary.
+    if (final_reading_units == "celcius")
+    {
+        final_reading_temp = celcius_to_fahrenheit(final_reading);
+    }
+
     // Convert gravity units, if necessary.
-    if (og_units == "brix")
+    if (original_reading_units == "brix")
     {
-        og = brix_to_sg(og);
+        original_brix = original_reading;
+        original_reading = brix_to_sg(original_reading);
     }
-    if (fg_units == "brix")
+
+    // Adjust final brix for temperature.
+    if ((final_reading_temp_check == true) && (original_reading_units == "brix") && (final_reading_units == "brix"))
     {
-        fg = brix_to_sg(fg);
+        final_reading = calculate_adjusted_final_brix_to_sg(original_brix, final_reading, final_reading_temp);
     }
-    if (fg <= og)
+    else if (final_reading_units == "brix")
     {
-        abv = (76.08 * (og - fg) / (1.775 - og)) * (fg / 0.794);
+        final_reading = brix_to_sg(final_reading);
+    }
+
+    // Calculate ABV.
+    if (final_reading <= original_reading)
+    {
+        abv = (76.08 * (original_reading - final_reading) / (1.775 - original_reading)) * (final_reading / 0.794);
     }
     else
     {
         alert("Final gravity is less than the original gravity, indicating no fermentation.");
     }
 
+    // Convert final values (back) to brix, just for display.
+    //original_brix = sg_to_brix(original_reading);
+    //final_brix = sg_to_brix(final_reading);
+
     let i;
     for (i = 0; i < counter; ++i)
     {
-        let alpha_acid = document.getElementsByName("hopAdditionAA" + i)[0].value;
-        let weight = document.getElementsByName("hopAdditionWeight" + i)[0].value;
-        let boil_time = document.getElementsByName("hopAdditionBoilTime" + i)[0].value;
+        let alpha_acid = document.getElementById("hopAdditionAA" + i).value;
+        let weight = document.getElementById("hopAdditionWeight" + i).value;
+        let boil_time = document.getElementById("hopAdditionBoilTime" + i).value;
         let aau = alpha_acid * weight;
-        let ibu = aau * hop_utilization(og, boil_time) * volume_conversion / volume;
+        let ibu = aau * hop_utilization(original_reading, boil_time) * volume_conversion / volume;
         total_ibu = total_ibu + ibu;
     }
 
     out_str = "<table>\n";
-    out_str = out_str + "<td><b>OG</b></td><td><b>"
-    out_str = out_str + og.toFixed(2);
+    out_str = out_str + "<td><b>Original Gravity</b></td><td><b>"
+    out_str = out_str + original_reading.toFixed(4);
     out_str = out_str + "</b></td><tr>\n"
-    out_str = out_str + "<td><b>FG</b></td><td><b>"
-    out_str = out_str + fg.toFixed(2);
+    out_str = out_str + "<td><b>Final Gravity</b></td><td><b>"
+    out_str = out_str + final_reading.toFixed(4);
     out_str = out_str + "</b></td><tr>\n"
     out_str = out_str + "<td><b>Alcohol</b></td><td><b>"
     out_str = out_str + abv.toFixed(2);
@@ -180,12 +248,19 @@ function calc()
     <div class="body-text content">
 
         <form method="POST">
-            <b>Volume</b>: <input type="text" name="volume" value="5.0"> <select name="volume_units"><option value="gallons">gallon(s)</option><option value="litres">litre(s)</option></select> <br>
-            <b>Original Gravity</b>: <input type="text" name="OG" value="1.06"> <select name="og_units"><option value="gravity">gravity</option><option value="brix">brix</option></select><br>
-            <b>Final Gravity</b>: <input type="text" name="FG" value="1.02"> <select name="fg_units"><option value="gravity">gravity</option><option value="brix">brix</option></select><br>
+            <b>Volume</b>: <input type="text" id="volume" value="5.0"> <select id="volume_units"><option value="gallons">gallon(s)</option><option value="litres">litre(s)</option></select>
+            <br>
+            <b>Original Gravity</b>: <input type="text" id="original_reading" value="1.06"> <select id="original_reading_units"><option value="gravity">gravity</option><option value="brix">brix</option></select>
+            <br>
+            <b>Final Gravity</b>: <input type="text" id="final_reading" value="1.02"> <select id="final_reading_units" onchange="on_final_reading_units_changed()"><option value="gravity">gravity</option><option value="brix">brix</option></select>
+            <div id="final_reading_temp_para" style="display: none;">
+               <input type="text" id="final_reading_temp" value="60"> <select id="final_reading_temp_units"><option value="fahrenheit">F</option><option value="celcius">C</option></select>
+               <label>Adjust For Temp</label><input type="checkbox" id="final_reading_temp_check" value="adjust" checked>
+            </div>
+            <br>
             <div id="hopAdditions">
             </div>
-            <input type="button" value="Add more hops" onClick="add_another_hop_input();"> <br>
+            <input type="button" value="Add More Hops" onClick="add_another_hop_input();"> <br>
             <input type="button" value="Calculate" onClick="calc();">
         </form>
 
@@ -212,7 +287,7 @@ function calc()
                 <a href="tip_jar.html">Tip Jar</a>
             </p>
 
-            <p class="footer-company-name">Michael Simms &copy; 2019</p>
+            <p class="footer-company-name">Michael Simms &copy; 2021</p>
 
         </div>
 
@@ -224,7 +299,10 @@ function calc()
 
 <script>
     skrollr.init();
-    add_another_hop_input()
+
+    window.onload = (event) => {
+        add_another_hop_input();
+    };
 </script>
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
