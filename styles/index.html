@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+</head>
+
+<body>
+<canvas class="circleCanvas" width="400" height="200"></canvas><br />
+<button class="Btn">CLICK HERE</button>
+<script>
+    function parse_styles_csv() {
+        Papa.parse("https://mike-likes-beer.com/styles/styles.csv", {
+            download: true,
+            complete: function(results) {
+                document.write(results);
+            }
+        });
+    }
+
+    function draw() {
+    }
+
+    let canvasEle = document.querySelector(".circleCanvas");
+    let BtnEle = document.querySelector(".Btn");
+
+    BtnEle.addEventListener("click", () => {
+        var circle = canvasEle.getContext("2d");
+        circle.beginPath();
+        circle.arc(180, 100, 90, 0, 2 * Math.PI);
+        circle.stroke();
+    });
+</script>
+</body>
+
+</html>
