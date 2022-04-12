@@ -162,6 +162,10 @@ form {
     border: 1px solid rgba(0, 0, 0, 0.3);
 }
 
+.main h1 {
+    font-family: sans-serif;
+}
+
 .donation table {
     font-family: sans-serif;
     font-size: 18px;
@@ -184,6 +188,46 @@ form {
 .donation tr {
     opacity: 0.7;
 }
+
+.recipe p {
+    font-family: sans-serif;
+    font-size: 18px;
+}
+
+.recipe ol {
+    font-family: sans-serif;
+    font-size: 18px;
+    padding: 20px 20px 20px 20px;
+}
+
+.recipe div {
+    padding: 20px 20px 20px 20px;
+}
+
+.recipe table {
+    font-family: sans-serif;
+    font-size: 18px;
+    background-color: rgba(0,0,0,0);
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+    float: center;
+}
+
+.recipe td {
+    border: 0px solid #FFFFFF;
+    padding: 0px;
+    border-radius: 0px;
+    text-shadow: 0px 0px #FFFFFF;
+    text-align: center;
+    word-break: break-all;
+}
+
+.recipe tr {
+    opacity: 0.7;
+}
+
+.recipe tr:first-child { font-weight: bold }
 
 .result div {
     width: 75%;
