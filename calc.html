@@ -21,7 +21,7 @@ var counter = 0;
 function add_another_hop_input()
 {
     let newDiv = document.createElement('div');
-    newDiv.innerHTML = "<b>Hop Addition " + (counter + 1) + "</b> - Alpha Acid: <input type='text' id='hopAdditionAA" + counter + "' value='12.0'>%, Weight: <input type='text' id='hopAdditionWeight" + counter + "' value='1.0'> oz., Boil Time: <input type='text' id='hopAdditionBoilTime" + counter + "' value='60'> minutes";
+    newDiv.innerHTML = "<b>Hop Addition " + (counter + 1) + "</b> - Alpha Acid: <input type='text' id='hopAdditionAA" + counter + "' value='12.0' onchange='calc()'>%, Weight: <input type='text' id='hopAdditionWeight" + counter + "' value='1.0' onchange='calc()'> oz., Boil Time: <input type='text' id='hopAdditionBoilTime" + counter + "' value='60' onchange='calc()'> minutes";
     document.getElementById('hopAdditions').appendChild(newDiv);
     counter++;
 }
@@ -121,6 +121,9 @@ function on_final_reading_units_changed()
     {
         final_reading_temp_para.style = 'display: none';
     }
+
+    // Recalculate
+    calc();
 }
 
 /// @function calc
@@ -210,6 +213,7 @@ function calc()
 
     document.getElementById("result").innerHTML = out_str;
 }
+
 </script>
 
 <head>
@@ -252,7 +256,7 @@ function calc()
             <br>
             <b>Original Gravity</b>: <input type="text" id="original_reading" value="1.06"> <select id="original_reading_units"><option value="gravity">gravity</option><option value="brix">brix</option></select>
             <br>
-            <b>Final Gravity</b>: <input type="text" id="final_reading" value="1.02"> <select id="final_reading_units" onchange="on_final_reading_units_changed()"><option value="gravity">gravity</option><option value="brix">brix</option></select>
+            <b>Final Gravity</b>: <input type="text" id="final_reading" value="1.02"> <select id="final_reading_units"><option value="gravity">gravity</option><option value="brix">brix</option></select>
             <div id="final_reading_temp_para" style="display: none;">
                <input type="text" id="final_reading_temp" value="60"> <select id="final_reading_temp_units"><option value="fahrenheit">F</option><option value="celcius">C</option></select>
                <label>Adjust For Temp</label><input type="checkbox" id="final_reading_temp_check" value="adjust" checked>
@@ -298,11 +302,36 @@ function calc()
 <script src="assets/skrollr.min.js"></script>
 
 <script>
+    function register_change_handlers()
+    {
+        let volume = document.getElementById("volume");
+        let volume_units = document.getElementById("volume_units");
+        let original_reading = document.getElementById("original_reading");
+        let original_reading_units = document.getElementById("original_reading_units");
+        let final_reading = document.getElementById("final_reading");
+        let final_reading_units = document.getElementById("final_reading_units");
+        let final_reading_temp = document.getElementById("final_reading_temp");
+        let final_reading_temp_units = document.getElementById("final_reading_temp_units");
+        let final_reading_temp_check = document.getElementById("final_reading_temp_check");
+
+        volume.addEventListener('change', calc);
+        volume_units.addEventListener('change', calc);
+        original_reading.addEventListener('change', calc);
+        original_reading_units.addEventListener('change', calc);
+        final_reading.addEventListener('change', calc);
+        final_reading_units.addEventListener('change', calc);
+        final_reading_temp.addEventListener('change', calc);
+        final_reading_temp_units.addEventListener('change', on_final_reading_units_changed);
+        final_reading_temp_check.addEventListener('change', calc);
+    }
+
     skrollr.init();
 
     window.onload = (event) => {
         add_another_hop_input();
+        register_change_handlers();
     };
+
 </script>
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
