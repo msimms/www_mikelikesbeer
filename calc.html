@@ -236,7 +236,7 @@ function calc()
 
     <div
         class="parallax-image"
-        style="background-image: url(assets/images/beer.jpg)"
+        style="background-image: url(assets/images/empty_bkgnd.jpg)"
         data-anchor-target="#page-intro"
         data-bottom-top="transform: translateY(-50%);"
         data-top-bottom="transform: translateY(80%);" >
@@ -245,12 +245,11 @@ function calc()
 
 <div id="skrollr-body">
 
-    <div id="page-intro" class="gap" style="background-image:url(assets/images/beer.jpg); ">
+    <div id="page-intro" class="gap">
         <h1>ABV and IBU Calculator</h1>
     </div>
 
     <div class="body-text content">
-
         <form method="POST">
             <b>Volume</b>: <input type="text" id="volume" value="5.0"> <select id="volume_units"><option value="gallons">gallon(s)</option><option value="litres">litre(s)</option></select>
             <br>
@@ -270,13 +269,10 @@ function calc()
 
         <div id="result" class="result">
         </div>
-
     </div>
 
     <footer>
-
         <div class="footer-left">
-
             <p class="footer-links">
                 <a href="https://www.youtube.com/channel/UCy7NAv_0XcP_DB0gu-bpr2A">YouTube</a>
                 ·
@@ -284,17 +280,14 @@ function calc()
                 ·
                 <a href="https://twitter.com/mike_likes_beer">Twitter</a>
                 ·
-                <a href="https://untappd.com/SimmsHomebrew">Untappd</a>
+                <a href="https://untappd.com/MikeLikesBeerHomebrew">Untappd</a>
                 ·
                 <a href="calc.html">Beer Calculator</a>
                 ·
                 <a href="tip_jar.html">Tip Jar</a>
             </p>
-
-            <p class="footer-company-name">Michael Simms &copy; 2021</p>
-
+            <p class="footer-company-name">Michael Simms &copy; 2022</p>
         </div>
-
     </footer>
 
 </div>
@@ -331,7 +324,6 @@ function calc()
         add_another_hop_input();
         register_change_handlers();
     };
-
 </script>
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
