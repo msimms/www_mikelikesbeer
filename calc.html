@@ -271,24 +271,12 @@ function calc()
         </div>
     </div>
 
-    <footer>
-        <div class="footer-left">
-            <p class="footer-links">
-                <a href="https://www.youtube.com/channel/UCy7NAv_0XcP_DB0gu-bpr2A">YouTube</a>
-                ·
-                <a href="https://untappd.com/MikeLikesBeerHomebrew">Untappd</a>
-                ·
-                <a href="calc.html">Beer Calculator</a>
-                ·
-                <a href="tip_jar.html">Tip Jar</a>
-            </p>
-            <p class="footer-company-name">Michael Simms &copy; 2023</p>
-        </div>
-    </footer>
+    <div class="footerdiv"></div>
 
 </div>
 
 <script src="assets/skrollr.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
 <script>
     function register_change_handlers()
@@ -320,9 +308,11 @@ function calc()
         add_another_hop_input();
         register_change_handlers();
     };
-</script>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    $(function (){
+        $(".footerdiv").load("footer.html");
+    });
+</script>
 
 </body>
 </html>

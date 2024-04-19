@@ -13,9 +13,11 @@
 
 <body>
 
-<h1>Jean Quad Van Damme (Belgian Quad)</h1>
+<div>
 
 <section class="recipe">
+
+    <h1>Jean Quad Van Damme (Belgian Quad)</h1>
 
     <h2>Description</h2>
     <p>
@@ -50,23 +52,18 @@
         <li>Cool</li>
         <li>Pitch the yeast</li>
     </ol>
-
 </section>
 
-<footer>
-    <div class="footer-left">
-        <p class="footer-links">
-            <a href="https://www.youtube.com/channel/UCy7NAv_0XcP_DB0gu-bpr2A">YouTube</a>
-            ·
-            <a href="https://untappd.com/MikeLikesBeerHomebrew">Untappd</a>
-            ·
-            <a href="../calc.html">Beer Calculator</a>
-            ·
-            <a href="../tip_jar.html">Tip Jar</a>
-        </p>
-        <p class="footer-company-name">Michael Simms &copy; 2023</p>
-    </div>
-</footer>
+</div>
+
+<div class="footerdiv"></div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>
+    $(function (){
+        $(".footerdiv").load("../../footer.html");
+    });
+</script>
 
 </body>
 </html>

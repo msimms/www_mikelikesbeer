@@ -181,30 +181,10 @@ form {
     border: 1px solid rgba(0, 0, 0, 0.3);
 }
 
-.main h1 {
+.recipe h1 {
     font-family: sans-serif;
-}
-
-.donation table {
-    font-family: sans-serif;
-    font-size: 18px;
-    background-color: rgba(0,0,0,0);
-    margin-left: auto;
-    margin-right: auto;
-    width: 80%;
-    float: center;
-}
-
-.donation td {
-    border: 0px solid #FFFFFF;
-    border-radius: 0px;
-    text-shadow: 0px 0px #FFFFFF;
     text-align: center;
-    word-break: break-all;
-}
-
-.donation tr {
-    opacity: 0.7;
+    font: normal 48px 'Marker Felt', condensed, sans-serif;
 }
 
 .recipe p {
@@ -219,6 +199,12 @@ form {
 }
 
 .recipe section {
+    padding: 25px;
+    margin: 25px;
+    display: inline-block;
+}
+
+.recipe div {
     padding: 25px;
     margin: 25px;
     display: inline-block;
